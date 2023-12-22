@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Rolling Game</title>
+    <style>
+        /* Add some basic styling for better presentation */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #dice-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Align the dice horizontally */
+            width: 400px; /* Set a fixed width for the container */
+            margin-bottom: 10px;
+        }
+        .die {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+        }
+        #rollButton {
+            background-color: rosybrown;
+            color: black;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #rollButton:hover {
+            background-color: darkred;
+        }
+        #probabilityTable {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        #probabilityTable th, #probabilityTable td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        #probabilityTable th {
+            background-color: rosybrown;
+            color: black;
+        }
+
+        #probabilityTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #probabilityTable tr:hover {
+            background-color: #ddd;
+        }
+
+        h2{ font-family: arial,sans-serif;
+            color : darkred; }
+
+
+        </style>
+    </head>
+    <body>
+
+        <h2>Dice Rolling Game</h2>
+
+        <div id="dice-container"></div>
+
+        <button id="rollButton" onclick="rollDice()">Roll 12 Dice</button>
+
+        <table id="probabilityTable">
+            <thead>
+                <tr>
+                    <th>Face</th>
+                    <th>Count</th>
+                    <th>Probability</th>
+                </tr>
+            </thead>
+            <tbody id="probabilityBody"></tbody>
+        </table>
+
+        <script>
+            var dieImages = [];
+
+            function start() {
+                for (var i = 1; i <= 12; i++) {
+                    var die = document.createElement("img");
+                    die.setAttribute("class", "die");
+                    die.setAttribute("src", "diel.png");
+                    die.setAttribute("alt", "blank image");
+                    dieImages.push(die);
+                    document.getElementById("dice-container").appendChild(die);
+                }
+            }
+
+            function rollDice() {
+            var counts = Array(7).fill(0); // Array to store counts for each face
+            var totalRolls = dieImages.length;
+
+            for (var i = 0; i < totalRolls; i++) {
+                var dieValue = Math.floor(1 + Math.random() * 6);
+                dieImages[i].setAttribute("src", "die" + dieValue + ".png");
+                dieImages[i].setAttribute("alt", "die image with " + dieValue + " spot(s)");
+                counts[dieValue]++;
+            }
+
+            updateProbabilityTable(counts, totalRolls);
+        }
+
+        function updateProbabilityTable(counts, totalRolls) {
+            var probabilityBody = document.getElementById("probabilityBody");
+            probabilityBody.innerHTML = "";
+
+            for (var face = 1; face <= 6; face++) {
+                var count = counts[face];
+                var probability = (count / totalRolls * 100).toFixed(2) + "%";
+
+                var row = document.createElement("tr");
+                var cellFace = document.createElement("td");
+                var cellCount = document.createElement("td");
+                var cellProbability = document.createElement("td");
+
+                cellFace.textContent = face;
+                cellCount.textContent = count;
+                cellProbability.textContent = probability;
+
+                row.appendChild(cellFace);
+                row.appendChild(cellCount);
+                row.appendChild(cellProbability);
+
+                probabilityBody.appendChild(row);
+            }
+        }
+
+        start();
+    </script>
+
+</body>
+</html>
